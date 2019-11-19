@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat app</title>
+</head>
+<body>
+    <div class="row">
+        <div>
+            <div id="title">Receiver id</div>
+            <input type="text" id="id"/>
+            <div id="chat">Message</div>
+            <input type="text" id="text"/>
+            <div id="status">Status</div>
+            <input type="submit" onclick="send()" />
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        function send() {
+            var id = document.getElementById("id").value;
+
+            var data = {sender:{id:"2",name:"bar"},timestamp: new Date().toISOString(),text: document.getElementById("text").value};
+            var json = JSON.stringify(data);
+
+            $.ajax({
+                url: 'http://localhost:8080/users/' + id,
+                headers: {
+                    'Content-Type':'application/json'
+                    },
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: json,
+                success: function(data) {
+                    document.getElementById("status").style = "color: green";
+                    document.getElementById("status").innerHTML = "Sent";
+                 },
+                 error: function(data) {
+                    document.getElementById("status").style = "color: red";
+                    document.getElementById("status").innerHTML = "Error";
+                 },
+               });
+            };
+        </script>
+</body>
+</html>

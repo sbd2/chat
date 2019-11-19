@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  chat:
+    image: chat
+    environment:
+      - CLOUD_RABBITMQ_USERNAME=${CLOUD_RABBITMQ_USERNAME}
+      - CLOUD_RABBITMQ_PASSWORD=${CLOUD_RABBITMQ_PASSWORD}
+    ports:
+      - "8080:8080"

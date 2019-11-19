@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+    <div class="row">
+        <div>
+            <input type="text" id="id"/>
+            <input type="submit" onclick="updateId()" />
+            <div id="status">Status</div>
+            <div id="title">Messages</div>
+            <div id="chat"></div>
+        </div>
+    </div>
+        <script type="text/javascript">
+        function updateId() {
+            //check for browser support
+            if(typeof(EventSource)!=="undefined") {
+                document.getElementById("status").style = "color: green";
+                document.getElementById("status").innerHTML = "Listening...";
+                //create an object, passing it the name and location of the server side script
+                var id = document.getElementById("id").value;
+                var sourceEndpoint = "http://localhost:8080/users/" + id;
+                var eSource = new EventSource(sourceEndpoint);
+                //detect message receipt
+                eSource.onmessage = function(event) {
+                    //write the received data to the page
+                    var json = JSON.parse(event.data);
+                    var message = document.createElement("p");
+                    message.appendChild(document.createTextNode(json.timestamp));
+                    message.appendChild(document.createElement("br"));
+                    message.appendChild(document.createTextNode(json.text));
+                    document.getElementById("chat").appendChild(message);
+                };
+            }
+            else {
+                document.getElementById("serverData").innerHTML="Whoops! Your browser doesn't receive server-sent events.";
+            }
+        }
+        </script>
+    </body>
+</html>
